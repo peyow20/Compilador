@@ -54,7 +54,17 @@ def p_multiples_estatutos(p):
 #Las 6 sigueintes reglas son para establecer la semantica 
 # de los difetenes tipos de estatutos 
 def p_asignacion(p):
-    '''asignacion : ID IGUAL expresion PUNCOM'''
+    '''asignacion : ID IGUAL expresion PUNCOM
+                  | ID INCREMENTO
+                  | ID DECREMENTO'''
+    
+    
+def p_expresion_and(p):
+    'expresion : expresion AND expresion'
+
+
+def p_expresion_or(p):
+    'expresion : expresion OR expresion'
 
 
 def p_escritura(p):

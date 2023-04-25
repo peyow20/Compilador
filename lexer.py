@@ -15,8 +15,8 @@ reserved = {
 }
 
 #Defino mis tokens
-tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'BOOL', 'CTEI', 'CTEF', 'CTEB', 'CTESTRING', 'ID', 'IF', 'ELSE', 'WHILE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV',
-'LLAVIZQ', 'LLAVDER', 'PARIZQ', 'PARDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT', 'ARRAY', 'ENDARRAY']
+tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'BOOL', 'CTEI', 'CTEF', 'CTEB', 'CTESTRING', 'ID', 'IF', 'ELSE', 'WHILE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV', 'MOD',
+'LLAVIZQ', 'LLAVDER', 'PARIZQ', 'PARDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT', 'ARRAY', 'ENDARRAY', 'INCREMENTO', 'DECREMENTO', 'AND', 'OR']
 
 
 t_ignore = " \t"
@@ -26,6 +26,15 @@ t_ignore = " \t"
 def t_ID(t):
     r'[A-za-z]+'
     t.type = reserved.get(t.value, 'ID')
+
+    if t.lexer.current_state() == 'INITIAL' and t.lexer.lexdata[t.lexpos:t.lexpos+2] == '++':
+        t.type = 'INCREMENTO'
+        t.value = 1
+        t.lexer.skip(2)
+    elif t.lexer.current_state() == 'INITIAL' and t.lexer.lexdata[t.lexpos:t.lexpos+2] == '--':
+        t.type = 'DECREMENTO'
+        t.value = -1
+        t.lexer.skip(2)
     return t
 
 def t_CTEI(t):
@@ -49,12 +58,28 @@ def t_CTESTRING(t):
 
 #Defino las expresiones regulares para los tokens que son sencillos
 
+def t_AND(t):
+    r'\&\&'
+    return t
+
+def t_OR(t):
+    r'\|\|'
+    return t
+
 def t_ARRAY(t):
     r'\['
     return t
 
 def t_ENDARRAY(t):
     r'\]'
+    return t
+
+def t_PLUSPLUS(t):
+    r'\+\+'
+    return t
+
+def t_MINUSMINUS(t):
+    r'--'
     return t
 
 def t_MAYOR(t):
@@ -95,6 +120,10 @@ def t_POR(t):
 
 def t_DIV(t):
     r'\/'
+    return t
+
+def t_MOD(t):
+    r'%'
     return t
 
 def t_PARIZQ(t):
