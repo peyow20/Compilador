@@ -51,7 +51,7 @@ def p_multiples_estatutos(p):
                        | empty'''
     
 
-#Las 6 sigueintes reglas son para establecer la semantica 
+#Las sigueintes reglas son para establecer la semantica 
 # de los difetenes tipos de estatutos 
 def p_asignacion(p):
     '''asignacion : ID IGUAL expresion PUNCOM
