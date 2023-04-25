@@ -28,7 +28,8 @@ def p_asignacion_id(p):
 #Esta regla define los tipos de variables que 
 def p_TIPO(p):
     '''TIPO : INT
-            | FLOAT'''
+            | FLOAT
+            | BOOL'''
 
 
 #Esta regla establece la semantica de un bloque de codigo
@@ -120,7 +121,8 @@ def p_factor(p):
 def p_var_cte(p):
     '''var_cte : ID
                | CTEI
-               | CTEF'''
+               | CTEF
+               | CTEB'''
 
 def p_empty(p):
     '''empty :'''

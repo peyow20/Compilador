@@ -7,14 +7,16 @@ reserved = {
     'var': 'VAR',
     'int': 'INT',
     'float': 'FLOAT',
+    'bool': 'BOOL',
     'if': 'IF',
     'else': 'ELSE',
+    'while': 'WHILE',
     'print': 'PRINT',
 }
 
 #Defino mis tokens
-tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'CTEI', 'CTEF', 'CTESTRING', 'ID', 'IF', 'ELSE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV',
-'LLAVIZQ', 'LLAVDER', 'PARIZQ', 'PARDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT',]
+tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'BOOL', 'CTEI', 'CTEF', 'CTEB', 'CTESTRING', 'ID', 'IF', 'ELSE', 'WHILE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV',
+'LLAVIZQ', 'LLAVDER', 'PARIZQ', 'PARDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT', 'ARRAY', 'ENDARRAY']
 
 
 t_ignore = " \t"
@@ -36,11 +38,25 @@ def t_CTEF(t):
     t.value = float(t.value)
     return t
 
+def t_CTEB(t):
+    r'(True|False)'
+    t.value = bool(t.value)
+    return t
+
 def t_CTESTRING(t):
     r'\".*\"'
     return t
 
 #Defino las expresiones regulares para los tokens que son sencillos
+
+def t_ARRAY(t):
+    r'\['
+    return t
+
+def t_ENDARRAY(t):
+    r'\]'
+    return t
+
 def t_MAYOR(t):
     r'\>'
     return t
