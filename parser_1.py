@@ -25,6 +25,20 @@ def p_asignacion_id(p):
                   | empty'''
 
 
+# Reglas para arreglos
+def p_array(p):
+    '''array : ID CORCHIZQ exp CORCHDER'''
+
+def p_array_init(p):
+    '''array_init : array IGUAL CORCHIZQ lista_exp CORCHDER'''
+
+def p_lista_exp(p):
+    '''lista_exp : expresion multiples_exp'''
+
+def p_multiples_exp(p):
+    '''multiples_exp : COMA expresion multiples_exp
+                     | empty'''
+
 #Esta regla define los tipos de variables que 
 def p_TIPO(p):
     '''TIPO : INT
@@ -42,7 +56,8 @@ def p_bloque(p):
 # o varias condiciones (if else) 
 def p_estatuto(p):
     '''estatuto : asignacion
-                 | condicion
+                 | condicion_if
+                 | condicion_while
                  | escritura'''
     
 
@@ -53,10 +68,22 @@ def p_multiples_estatutos(p):
 
 #Las sigueintes reglas son para establecer la semantica 
 # de los difetenes tipos de estatutos 
+
+
+
+#Regla para hacer la funcion de decremento e incremento (resta 1 o suma 1)
+def p_INCREMENTO(p):
+    '''INCREMENTO : MAS MAS'''
+
+
+def p_DECREMENTO(p):
+    '''DECREMENTO : MENOS MENOS'''
+
+
 def p_asignacion(p):
     '''asignacion : ID IGUAL expresion PUNCOM
-                  | ID INCREMENTO
-                  | ID DECREMENTO'''
+                  | ID INCREMENTO PUNCOM
+                  | ID DECREMENTO PUNCOM'''
     
     
 def p_expresion_and(p):
@@ -81,8 +108,8 @@ def p_multiples_print(p):
                  | empty'''
     
 
-def p_condicion(p):
-    '''condicion : IF PARIZQ expresion PARDER bloque PUNCOM
+def p_condicion_if(p):
+    '''condicion_if : IF PARIZQ expresion PARDER bloque PUNCOM
                  | IF PARIZQ expresion PARDER bloque else_condicion PUNCOM'''
 
 
@@ -90,12 +117,27 @@ def p_else_condicion(p):
     '''else_condicion : ELSE bloque'''
 
 
+def p_condicion_while(p):
+    '''condicion_while : WHILE PARIZQ expresion PARDER bloque PUNCOM'''
+
 #Regla que define la jeraquia de dos expresiones
 def p_expresion(p):
     '''expresion : exp 
                  | exp MAYOR exp
                  | exp MENOR exp
-                 | exp DIFF exp'''
+                 | exp DIFF exp
+                 | exp mas_igual exp
+                 | exp menor_igual exp
+                 | exp igual_igual exp'''
+
+def p_mas_igual(p):
+    '''mas_igual : MAYOR IGUAL'''
+
+def p_menor_igual(p):
+    '''menor_igual : MENOR IGUAL'''
+
+def p_igual_igual(p):
+    '''igual_igual : IGUAL IGUAL'''
 
 
 #Las siguientes dos reglas suman o restan 2 terminos con una llamada recursiva
@@ -117,6 +159,7 @@ def p_termino(p):
 def p_termino_operador(p):
     '''termino_operador : POR factor termino_operador
                         | DIV factor termino_operador
+                        | MOD factor termino_operador
                         | empty'''
     
 
@@ -142,4 +185,3 @@ def p_empty(p):
 parser = yacc.yacc()
 def parse(data):
     return parser.parse(data)
-
