@@ -8,16 +8,18 @@ reserved = {
     'int': 'INT',
     'float': 'FLOAT',
     'bool': 'BOOL',
+    'char': 'CHAR',
     'if': 'IF',
     'else': 'ELSE',
     'while': 'WHILE',
     'print': 'PRINT',
     'arr' : 'ARR',
+    'func' : 'FUNC',
 }
 
 #Defino mis tokens
-tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'BOOL', 'CTEI', 'CTEF', 'CTEB', 'CTESTRING', 'ID', 'IF', 'ELSE', 'WHILE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV', 'MOD',
-'LLAVIZQ', 'LLAVDER', 'PARIZQ', 'PARDER', 'CORCHIZQ', 'CORCHDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT', 'ARRAY', 'AND', 'OR', 'ARR']
+tokens = ['PROGRAM', 'VAR', 'INT', 'FLOAT', 'BOOL', 'CHAR', 'CTEI', 'CTEF', 'CTEB', 'CTESTRING', 'CTEC', 'ID', 'IF', 'ELSE', 'WHILE', 'MAYOR', 'MENOR', 'DIFF', 'MAS', 'MENOS', 'POR', 'DIV', 'MOD',
+'LLAVIZQ', 'VOID', 'LLAVDER', 'PARIZQ', 'PARDER', 'CORCHIZQ', 'CORCHDER', 'DOSPUN', 'PUNCOM', 'COMA', 'IGUAL', 'PRINT', 'ARRAY', 'AND', 'OR', 'ARR']
 
 
 t_ignore = " \t"
@@ -42,6 +44,11 @@ def t_CTEF(t):
 def t_CTEB(t):
     r'(True|False)'
     t.value = bool(t.value)
+    return t
+
+def t_CTEC(t):
+    r"'[a-zA-Z0-9]'"
+    t.value = t.value[1]
     return t
 
 def t_CTESTRING(t):
@@ -76,7 +83,7 @@ def t_ARR(t):
     return t
 
 def t_DIFF(t):
-    r'\<>'
+    r'\!'
     return t
 
 def t_LLAVIZQ(t):
