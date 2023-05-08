@@ -4,56 +4,6 @@ import ply.yacc as yacc
 from semantic_cube import BOOL, CHAR, SEMANTIC_CUBE
 
 
-
-#Pilas que guardan los operadores y operandos
-operador_stack = []
-operando_stack = []
-
-#Pila que nos ayuda a mantener el flujo del programa
-salto_stack = []
-
-cuad_cont = 0
-cuad = []
-
-
-#Creo mi tabla de simbolos
-symbol_table = {}
-
-# Función para agregar una nueva variable a la tabla de símbolos
-def add_variable_to_table(name, data_type):
-    global symbol_table
-    symbol_table[name] = {'data_type': data_type, 'value': None}
-    
-
-def get_variable_type(variable_name):
-    global symbol_table
-    if variable_name in symbol_table:
-        return symbol_table[variable_name]['data_type']
-    else:
-        raise Exception("Variable '{}' is not defined".format(variable_name))
-    
-
-# Funciones auxiliares para generacion de cuadruplo
-#crear varibale temporal 
-
-def genera_cuad(temp):
-    op2 = operando_stack.pop()
-    op1 = operando_stack.pop()
-    operador = operador_stack.pop()
-    #Verificar aqui el cubo semantico
-    cuad.append((operador, op1, op2, temp))
-    global cuad_cont
-    cuad_cont += 1
-    operando_stack.append(temp)
-
-def genera_cuad_asignacion():
-    op = operando_stack.pop()
-    var = operando_stack.pop()
-    cuad.append(('=', op, None, var))
-    global cuad_cont
-    cuad_cont += 1
-
-
 #Esta es la estructura que debe tener mi codigo
 def p_program(p):
     '''program : PROGRAM ID PUNCOM vars bloque  '''
@@ -179,6 +129,10 @@ def p_funcion(p):
                | FLOAT ID PARIZQ vars_func PARDER vars bloque PUNCOM
                | BOOL ID PARIZQ vars_func PARDER vars bloque PUNCOM
                | CHAR ID PARIZQ vars_func PARDER vars bloque PUNCOM'''
+    
+ 
+def p_condicion_for(p):
+    '''condicion_for : FOR ID IGUAL expresion TO expresion DO bloque'''
 
 def p_vars_func(p):
     '''vars_func : TIPO ID COMA vars_func
@@ -251,6 +205,34 @@ def p_var_cte(p):
 def p_empty(p):
     '''empty :'''
     pass
+
+
+#Pilas que guardan los operadores y operandos
+operador_stack = []
+operando_stack = []
+tipos_stack = []
+
+#Pila que nos ayuda a mantener el flujo del programa
+salto_stack = []
+
+cuad_cont = 0
+cuad = []
+
+
+#Direccion de memoria
+const_int = 0
+const_float = 1000
+const_char = 3000
+local_int = 4000
+local_float = 5000
+local_bool = 6000
+local_char = 7000
+global_int = 8000
+global_float = 9000
+global_bool = 10000
+global_char = 11000
+
+
 
 parser = yacc.yacc()
 def parse(data):
