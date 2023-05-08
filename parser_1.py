@@ -232,8 +232,46 @@ global_float = 9000
 global_bool = 10000
 global_char = 11000
 
+# Define the symbol table as a dictionary
+symbol_table = {}
+
+# Implement the analyze_semantics() function
+def analyze_semantics(ast):
+    if isinstance(ast, BinOpNode):
+        left_type = analyze_semantics(ast.left)
+        right_type = analyze_semantics(ast.right)
+        if left_type != right_type:
+            raise TypeError("Type mismatch in binary operation")
+        return left_type
+    elif isinstance(ast, IntNode):
+        return "int"
+    elif isinstance(ast, FloatNode):
+        return "float"
+    else:
+        raise TypeError(f"Unknown AST node type: {type(ast).__name__}")
+
+def analyze_semantics(ast):
+    if isinstance(ast, AssignNode):
+        variable_name = ast.variable_name
+        if variable_name not in symbol_table:
+            raise NameError(f"Variable {variable_name} is not declared")
+        analyze_semantics(ast.value)
+    elif isinstance(ast, VarNode):
+        variable_name = ast.variable_name
+        if variable_name not in symbol_table:
+            raise NameError(f"Variable {variable_name} is not declared")
+    elif isinstance(ast, DeclNode):
+        variable_name = ast.variable_name
+        if variable_name in symbol_table:
+            raise NameError(f"Variable {variable_name} is already declared")
+        symbol_table[variable_name] = ast.type_name
+    else:
+        for child in ast.children:
+            analyze_semantics(child)
 
 
 parser = yacc.yacc()
 def parse(data):
     return parser.parse(data)
+#ast = parser.parse(source_code, lexer=lexer)
+#analyze_semantics(ast)
